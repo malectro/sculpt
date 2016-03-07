@@ -1,0 +1,19 @@
+{
+  "name": "sculpt",
+  "version": "0.0.0",
+  "description": "a JavaScript frozen object sculptor",
+  "main": "sculpt.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malectro/sculpt.git"
+  },
+  "author": "Kyle Warren",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/malectro/sculpt/issues"
+  },
+  "homepage": "https://github.com/malectro/sculpt#readme"
+}
