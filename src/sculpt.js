@@ -18,17 +18,17 @@ function clone(thing: any): any {
 /**
  * Basic Sculptors
  */
-export function push(target: Array, items: any): Array {
+export function push(target: Array<any>, items: any): Array<any> {
   return freeze(target.concat(items));
 }
 
-export function unshift(target: Array, items: any): Array {
+export function unshift(target: Array<any>, items: any): Array<any> {
   let clone = target.slice();
   clone.unshift(items);
   return freeze(clone);
 }
 
-export function splice(target: Array, items: Array): Array {
+export function splice(target: Array<any>, items: Array<any>): Array<any> {
   let clone = target.slice();
   for (let item of items) {
     clone.splice(item);
@@ -36,7 +36,7 @@ export function splice(target: Array, items: Array): Array {
   return freeze(clone);
 }
 
-export function set(target: Array | Object, key: any, value: any): Array | Object {
+export function set(target: Array<any> | Object, key: any, value: any): Array<any> | Object {
   let clonedTarget = clone(target);
   clonedTarget[key] = freeze(value);
   return freeze(clone);
@@ -46,11 +46,11 @@ export function assign(target: Object, source: Object): Object {
   return freeze(_assign({}, target, source));
 }
 
-export function apply(target: any, mapper: Function): any {
+export function apply(target: any, mapper: (mapee: any) => any): any {
   return freeze(mapper(target));
 }
 
-export function map(target: Array, mapper: Function): any {
+export function map(target: any[], mapper: (mapee: any) => any): any {
   return freeze(target.map(mapper));
 }
 
