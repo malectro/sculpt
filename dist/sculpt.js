@@ -38,13 +38,13 @@ function push(target, items) {
 }
 
 function unshift(target, items) {
-  var clone = target.slice();
-  clone.unshift(items);
-  return freeze(clone);
+  var clonedTarget = target.slice();
+  clonedTarget.unshift(items);
+  return freeze(clonedTarget);
 }
 
 function splice(target, items) {
-  var clone = target.slice();
+  var clonedTarget = target.slice();
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
   var _iteratorError = undefined;
@@ -53,7 +53,7 @@ function splice(target, items) {
     for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
       var item = _step.value;
 
-      clone.splice(item);
+      clonedTarget.splice(item);
     }
   } catch (err) {
     _didIteratorError = true;
@@ -70,17 +70,17 @@ function splice(target, items) {
     }
   }
 
-  return freeze(clone);
+  return freeze(clonedTarget);
 }
 
 function set(target, key, value) {
   var clonedTarget = clone(target);
   clonedTarget[key] = freeze(value);
-  return freeze(clone);
+  return freeze(clonedTarget);
 }
 
 function assign(target, source) {
-  return freeze(_assign({}, target, source));
+  return freeze(_assign(clone(target), source));
 }
 
 function apply(target, mapper) {
@@ -101,6 +101,7 @@ var sculptors = {
   $splice: splice,
   $set: swap, // $set doesn't behave entirely like set() by design
   $assign: assign,
+  $merge: assign,
   $apply: apply,
   $map: map
 };

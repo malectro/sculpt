@@ -23,27 +23,27 @@ export function push(target: Array<any>, items: any): Array<any> {
 }
 
 export function unshift(target: Array<any>, items: any): Array<any> {
-  let clone = target.slice();
-  clone.unshift(items);
-  return freeze(clone);
+  let clonedTarget = target.slice();
+  clonedTarget.unshift(items);
+  return freeze(clonedTarget);
 }
 
 export function splice(target: Array<any>, items: Array<any>): Array<any> {
-  let clone = target.slice();
+  let clonedTarget = target.slice();
   for (let item of items) {
-    clone.splice(item);
+    clonedTarget.splice(item);
   }
-  return freeze(clone);
+  return freeze(clonedTarget);
 }
 
 export function set(target: Array<any> | Object, key: any, value: any): Array<any> | Object {
   let clonedTarget = clone(target);
   clonedTarget[key] = freeze(value);
-  return freeze(clone);
+  return freeze(clonedTarget);
 }
 
 export function assign(target: Object, source: Object): Object {
-  return freeze(_assign({}, target, source));
+  return freeze(_assign(clone(target), source));
 }
 
 export function apply(target: any, mapper: (mapee: any) => any): any {
@@ -65,6 +65,7 @@ const sculptors = {
   $splice: splice,
   $set: swap, // $set doesn't behave entirely like set() by design
   $assign: assign,
+  $merge: assign,
   $apply: apply,
   $map: map,
 };
