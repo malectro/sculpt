@@ -80,5 +80,11 @@ describe('sculpt', () => {
       expect(target).toEqual([1, 5, 2]);
     });
   });
+
+  describe('set', () => {
+    it('sets', () => {
+      expect(set({key: 1}, 'key', 2)).toEqual({key: 2});
+    });
+  });
 });
 
