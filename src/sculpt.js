@@ -24,14 +24,14 @@ export function push(target: Array<any>, items: any): Array<any> {
 
 export function unshift(target: Array<any>, items: any): Array<any> {
   let clonedTarget = target.slice();
-  clonedTarget.unshift(items);
+  clonedTarget.unshift.apply(clonedTarget, items);
   return freeze(clonedTarget);
 }
 
 export function splice(target: Array<any>, items: Array<any>): Array<any> {
   let clonedTarget = target.slice();
   for (let item of items) {
-    clonedTarget.splice(item);
+    clonedTarget.splice.apply(clonedTarget, item);
   }
   return freeze(clonedTarget);
 }
