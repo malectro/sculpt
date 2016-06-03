@@ -39,7 +39,7 @@ function push(target, items) {
 
 function unshift(target, items) {
   var clonedTarget = target.slice();
-  clonedTarget.unshift(items);
+  clonedTarget.unshift.apply(clonedTarget, items);
   return freeze(clonedTarget);
 }
 
@@ -53,7 +53,7 @@ function splice(target, items) {
     for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
       var item = _step.value;
 
-      clonedTarget.splice(item);
+      clonedTarget.splice.apply(clonedTarget, item);
     }
   } catch (err) {
     _didIteratorError = true;
