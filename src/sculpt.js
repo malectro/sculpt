@@ -1,7 +1,6 @@
 /* @flow */
 
 const isArray = Array.isArray;
-const freeze = Object.freeze;
 const keys = Object.keys;
 const _assign = Object.assign;
 
@@ -19,13 +18,17 @@ function clone(thing: any): any {
  * Basic Sculptors
  */
 export function push(target: Array<any>, items: any): Array<any> {
-  return freeze(target.concat(items));
+  return target.concat(items);
+}
+
+export function pop(target: Array<any>): Array<any> {
+  return target.slice(0, -1);
 }
 
 export function unshift(target: Array<any>, items: any): Array<any> {
   let clonedTarget = target.slice();
   clonedTarget.unshift.apply(clonedTarget, items);
-  return freeze(clonedTarget);
+  return clonedTarget;
 }
 
 export function splice(target: Array<any>, items: Array<any>): Array<any> {
@@ -33,29 +36,35 @@ export function splice(target: Array<any>, items: Array<any>): Array<any> {
   for (let item of items) {
     clonedTarget.splice.apply(clonedTarget, item);
   }
-  return freeze(clonedTarget);
+  return clonedTarget;
 }
 
 export function set(target: Array<any> | Object, key: any, value: any): Array<any> | Object {
   let clonedTarget = clone(target);
-  clonedTarget[key] = freeze(value);
-  return freeze(clonedTarget);
+  clonedTarget[key] = value;
+  return clonedTarget;
+}
+
+export function unset(target: Object, key: any): Object {
+  let clonedTarget = clone(target);
+  delete clonedTarget[key];
+  return clonedTarget;
 }
 
 export function assign(target: Object, source: Object): Object {
-  return freeze(_assign(clone(target), source));
+  return _assign(clone(target), source);
 }
 
 export function apply(target: any, mapper: (mapee: any) => any): any {
-  return freeze(mapper(target));
+  return mapper(target);
 }
 
 export function map(target: any[], mapper: (mapee: any) => any): any {
-  return freeze(target.map(mapper));
+  return target.map(mapper);
 }
 
 function swap(target: any, value: any): any {
-  return freeze(value);
+  return value;
 }
 
 
@@ -90,6 +99,6 @@ export default function sculpt(target: any, spec: Object): any {
     }
   }
 
-  return freeze(newValue);
+  return newValue;
 }
 
