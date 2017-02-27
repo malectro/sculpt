@@ -4,20 +4,19 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 exports.push = push;
+exports.pop = pop;
 exports.unshift = unshift;
 exports.splice = splice;
 exports.set = set;
+exports.unset = unset;
 exports.assign = assign;
 exports.apply = apply;
 exports.map = map;
 exports.default = sculpt;
-
-
 var isArray = Array.isArray;
-var freeze = Object.freeze;
 var keys = Object.keys;
 var _assign = Object.assign;
 
@@ -34,13 +33,17 @@ function clone(thing) {
  * Basic Sculptors
  */
 function push(target, items) {
-  return freeze(target.concat(items));
+  return target.concat(items);
+}
+
+function pop(target) {
+  return target.slice(0, -1);
 }
 
 function unshift(target, items) {
   var clonedTarget = target.slice();
   clonedTarget.unshift.apply(clonedTarget, items);
-  return freeze(clonedTarget);
+  return clonedTarget;
 }
 
 function splice(target, items) {
@@ -70,29 +73,39 @@ function splice(target, items) {
     }
   }
 
-  return freeze(clonedTarget);
+  return clonedTarget;
 }
 
 function set(target, key, value) {
   var clonedTarget = clone(target);
-  clonedTarget[key] = freeze(value);
-  return freeze(clonedTarget);
+  clonedTarget[key] = value;
+  return clonedTarget;
+}
+
+function unset(target, key) {
+  var newObject = {};
+  keys(target).forEach(function (currentKey) {
+    if (currentKey !== key) {
+      newObject[currentKey] = target[currentKey];
+    }
+  });
+  return newObject;
 }
 
 function assign(target, source) {
-  return freeze(_assign(clone(target), source));
+  return _assign(clone(target), source);
 }
 
 function apply(target, mapper) {
-  return freeze(mapper(target));
+  return mapper(target);
 }
 
 function map(target, mapper) {
-  return freeze(target.map(mapper));
+  return target.map(mapper);
 }
 
 function swap(target, value) {
-  return freeze(value);
+  return value;
 }
 
 var sculptors = {
@@ -100,6 +113,7 @@ var sculptors = {
   $unshift: unshift,
   $splice: splice,
   $set: swap, // $set doesn't behave entirely like set() by design
+  $unset: unset,
   $assign: assign,
   $merge: assign,
   $apply: apply,
@@ -146,5 +160,5 @@ function sculpt(target, spec) {
     }
   }
 
-  return freeze(newValue);
+  return newValue;
 }
