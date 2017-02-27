@@ -46,9 +46,13 @@ export function set(target: Array<any> | Object, key: any, value: any): Array<an
 }
 
 export function unset(target: Object, key: any): Object {
-  let clonedTarget = clone(target);
-  delete clonedTarget[key];
-  return clonedTarget;
+  let newObject = {};
+  keys(target).forEach(currentKey => {
+    if (currentKey !== key) {
+      newObject[currentKey] = target[currentKey];
+    }
+  });
+  return newObject;
 }
 
 export function assign(target: Object, source: Object): Object {
@@ -73,6 +77,7 @@ const sculptors = {
   $unshift: unshift,
   $splice: splice,
   $set: swap, // $set doesn't behave entirely like set() by design
+  $unset: unset,
   $assign: assign,
   $merge: assign,
   $apply: apply,
