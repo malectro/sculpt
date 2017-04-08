@@ -92,15 +92,11 @@ const commands = keys(sculptors);
 export default function sculpt(target: any, spec: Object): any {
   let newValue = clone(target);
 
-  for (let command of commands) {
-    if (spec.hasOwnProperty(command)) {
-      newValue = sculptors[command](newValue, spec[command]);
-    }
-  }
-
   for (let key in spec) {
     if (!sculptors.hasOwnProperty(key)) {
       newValue[key] = sculpt(target[key], spec[key]);
+    } else {
+      newValue = sculptors[key](newValue, spec[key]);
     }
   }
 

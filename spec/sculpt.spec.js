@@ -187,7 +187,8 @@ describe('sculpt', () => {
 
       const result = sculpt(target, {
         order: {
-          $apply: order => order.filter(id => id !== 2).concat(2),
+          $apply: order => order.filter(id => id !== 2),
+          $push: 2,
         },
         models: {
           '2': {
