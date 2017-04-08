@@ -59,11 +59,11 @@ export function assign(target: Object, source: Object): Object {
   return _assign(clone(target), source);
 }
 
-export function apply(target: any, mapper: (mapee: any) => any): any {
+function apply(target: any, mapper: (mapee: any) => any): any {
   return mapper(target);
 }
 
-export function map(target: any[], mapper: (mapee: any) => any): any {
+function map(target: any[], mapper: (mapee: any) => any): any {
   return target.map(mapper);
 }
 
