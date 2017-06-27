@@ -36,6 +36,11 @@ describe('sculpt', () => {
       pop(target);
       expect(target).toEqual([1]);
     });
+
+    it('returns the target if the array is already empty', () => {
+      const target = [];
+      expect(pop(target)).toBe(target);
+    });
   });
 
   describe('unshift', () => {
@@ -84,6 +89,11 @@ describe('sculpt', () => {
       set(target, 'key', 2);
       expect(target).toEqual({key: 1});
     });
+
+    it('returns the target if the values are equal', () => {
+      const target = {key: 1};
+      expect(set(target, 'key', 1)).toBe(target);
+    });
   });
 
   describe('unset', () => {
@@ -97,8 +107,13 @@ describe('sculpt', () => {
 
     it('does not mutate the target', () => {
       const target = {key: 1};
-      unset(target);
+      unset(target, 'key');
       expect(target).toEqual({key: 1});
+    });
+
+    it('returns the target if the key does not exist', () => {
+      const target = {};
+      expect(unset(target, 'key')).toBe(target);
     });
   });
 
@@ -112,6 +127,16 @@ describe('sculpt', () => {
       assign(target, {key: 2});
       expect(target).toEqual({key: 1});
     });
+
+    // NOTE (malectro): because we use the native Object.assign internally, it
+    // would be inefficient to check equality.
+    /*
+    it('returns the target if the properties and values already exist on the target', () => {
+      const subtarget = {};
+      const target = {key: 1, key2: subtarget};
+      expect(assign(target, {key: 1, key2: subtarget})).toBe(target);
+    });
+    */
   });
 
   describe('sculpt', () => {
@@ -221,6 +246,29 @@ describe('sculpt', () => {
         },
       });
     });
+  });
+
+  it('returns the target if the result is deep equal', () => {
+    const target = {
+      '1': {
+        '1': [],
+      },
+      '2': 3,
+    };
+
+    const result = sculpt(target, {
+      '1': {
+        '1': {
+          $apply: array => array,
+        },
+        $unset: '2',
+      },
+      '2': {
+        $set: 3,
+      },
+    });
+
+    expect(result).toBe(target);
   });
 
 });

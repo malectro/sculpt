@@ -22,6 +22,10 @@ export function push(target: Array<any>, items: any): Array<any> {
 }
 
 export function pop(target: Array<any>): Array<any> {
+  if (target.length === 0) {
+    return target;
+  }
+
   return target.slice(0, -1);
 }
 
@@ -40,12 +44,20 @@ export function splice(target: Array<any>, items: Array<any>): Array<any> {
 }
 
 export function set(target: Array<any> | Object, key: any, value: any): Array<any> | Object {
+  if (target[key] === value) {
+    return target;
+  }
+
   let clonedTarget = clone(target);
   clonedTarget[key] = value;
   return clonedTarget;
 }
 
 export function unset(target: Object, key: any): Object {
+  if (!target.hasOwnProperty(key)) {
+    return target;
+  }
+
   let newObject = {};
   keys(target).forEach(currentKey => {
     if (currentKey !== key) {
@@ -56,7 +68,7 @@ export function unset(target: Object, key: any): Object {
 }
 
 export function assign(target: Object, source: Object): Object {
-  return _assign(clone(target), source);
+  return _assign({}, target, source);
 }
 
 function apply(target: any, mapper: (mapee: any) => any): any {
@@ -90,16 +102,27 @@ const commands = keys(sculptors);
  * Meta Sculptor
  */
 export default function sculpt(target: any, spec: Object): any {
-  let newValue = clone(target);
+  let newTarget = target;
+  let newValue;
+  let oldValue;
 
   for (let key in spec) {
     if (!sculptors.hasOwnProperty(key)) {
-      newValue[key] = sculpt(target[key], spec[key]);
+      oldValue = target[key];
+      newValue = sculpt(oldValue, spec[key]);
+
+      if (newValue !== oldValue) {
+        if (newTarget === target) {
+          newTarget = clone(target);
+        }
+
+        newTarget[key] = newValue;
+      }
     } else {
-      newValue = sculptors[key](newValue, spec[key]);
+      newTarget = sculptors[key](newTarget, spec[key]);
     }
   }
 
-  return newValue;
+  return newTarget;
 }
 
