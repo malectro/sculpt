@@ -68,7 +68,7 @@ export function unset(target: Object, key: any): Object {
 }
 
 export function assign(target: Object, source: Object): Object {
-  return _assign({}, target, source);
+  return _assign(clone(target), source);
 }
 
 function apply(target: any, mapper: (mapee: any) => any): any {
