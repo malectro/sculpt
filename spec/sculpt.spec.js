@@ -166,6 +166,37 @@ describe('sculpt', () => {
       });
     });
 
+    it('operates on commands in order', () => {
+      const target = {
+        key1: 1,
+      };
+
+      expect(
+        sculpt(target, {
+          $assign: {
+            key2: 2,
+            key3: 3,
+          },
+          $unset: ['key1', 'key2'],
+        })
+      ).toEqual({
+        key3: 3,
+      });
+
+      expect(
+        sculpt(target, {
+          $unset: ['key1', 'key2'],
+          $assign: {
+            key2: 2,
+            key3: 3,
+          },
+        })
+      ).toEqual({
+        key2: 2,
+        key3: 3,
+      });
+    });
+
     it('sculpts well', () => {
       const target = {
         order: [1, 2, 3, 4],
