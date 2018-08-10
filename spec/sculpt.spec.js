@@ -91,6 +91,10 @@ describe('sculpt', () => {
       expect(unset({key: 1, key2: 2}, 'key')).toEqual({key2: 2});
     });
 
+    it('unsets multiple keys', () => {
+      expect(unset({key: 1, key2: 2, key3: 3}, ['key2', 'key3'])).toEqual({key: 1});
+    });
+
     it('handles empty objects', () => {
       expect(unset({}, 'key')).toEqual({});
     });

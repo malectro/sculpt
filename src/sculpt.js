@@ -1,7 +1,7 @@
 /* @flow */
 
 const isArray = Array.isArray;
-const keys = Object.keys;
+const _keys = Object.keys;
 const _assign = Object.assign;
 
 function clone(thing: any): any {
@@ -45,10 +45,13 @@ export function set(target: Array<any> | Object, key: any, value: any): Array<an
   return clonedTarget;
 }
 
-export function unset(target: Object, key: any): Object {
+export function unset(target: Object, keys: string | string[]): Object {
   let newObject = {};
-  keys(target).forEach(currentKey => {
-    if (currentKey !== key) {
+  if (!Array.isArray(keys)) {
+    keys = [keys];
+  }
+  _keys(target).forEach(currentKey => {
+    if (!keys.includes(currentKey)) {
       newObject[currentKey] = target[currentKey];
     }
   });
@@ -83,7 +86,7 @@ const sculptors = {
   $apply: apply,
   $map: map,
 };
-const commands = keys(sculptors);
+const commands = _keys(sculptors);
 
 
 /**

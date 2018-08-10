@@ -13,11 +13,9 @@ exports.splice = splice;
 exports.set = set;
 exports.unset = unset;
 exports.assign = assign;
-exports.apply = apply;
-exports.map = map;
 exports.default = sculpt;
 var isArray = Array.isArray;
-var keys = Object.keys;
+var _keys = Object.keys;
 var _assign = Object.assign;
 
 function clone(thing) {
@@ -82,10 +80,13 @@ function set(target, key, value) {
   return clonedTarget;
 }
 
-function unset(target, key) {
+function unset(target, keys) {
   var newObject = {};
-  keys(target).forEach(function (currentKey) {
-    if (currentKey !== key) {
+  if (!Array.isArray(keys)) {
+    keys = [keys];
+  }
+  _keys(target).forEach(function (currentKey) {
+    if (!keys.includes(currentKey)) {
       newObject[currentKey] = target[currentKey];
     }
   });
@@ -119,7 +120,7 @@ var sculptors = {
   $apply: apply,
   $map: map
 };
-var commands = keys(sculptors);
+var commands = _keys(sculptors);
 
 /**
  * Meta Sculptor
@@ -127,36 +128,11 @@ var commands = keys(sculptors);
 function sculpt(target, spec) {
   var newValue = clone(target);
 
-  var _iteratorNormalCompletion2 = true;
-  var _didIteratorError2 = false;
-  var _iteratorError2 = undefined;
-
-  try {
-    for (var _iterator2 = commands[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-      var command = _step2.value;
-
-      if (spec.hasOwnProperty(command)) {
-        newValue = sculptors[command](newValue, spec[command]);
-      }
-    }
-  } catch (err) {
-    _didIteratorError2 = true;
-    _iteratorError2 = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion2 && _iterator2.return) {
-        _iterator2.return();
-      }
-    } finally {
-      if (_didIteratorError2) {
-        throw _iteratorError2;
-      }
-    }
-  }
-
   for (var key in spec) {
     if (!sculptors.hasOwnProperty(key)) {
       newValue[key] = sculpt(target[key], spec[key]);
+    } else {
+      newValue = sculptors[key](newValue, spec[key]);
     }
   }
 
