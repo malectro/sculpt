@@ -1,5 +1,5 @@
 {
-  "name": "sculpt",
+  "name": "@spaced-out/sculpt",
   "version": "0.0.0",
   "description": "a JavaScript frozen object sculptor",
   "main": "dist/sculpt.js",
